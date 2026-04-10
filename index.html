@@ -169,21 +169,22 @@ function jump() {
   jumping = true;
 
   let up = setInterval(() => {
-    y += 10;
-    if (y >= 100) {
+    y += 8; // sobe mais devagar
+    if (y >= 140) { // pula mais alto
       clearInterval(up);
+
       let down = setInterval(() => {
-        y -= 5;
-        if (y <= 5) {
-          y = 5;
+        y -= 3; // queda bem mais lenta
+        if (y <= 10) {
+          y = 10;
           clearInterval(down);
           jumping = false;
         }
         updatePosition();
-      }, 20);
+      }, 30); // mais suave
     }
     updatePosition();
-  }, 20);
+  }, 30);
 }
 
 function checkCollision() {
