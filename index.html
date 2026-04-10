@@ -1,179 +1,150 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<title>Jogo do Ursinho 💖</title>
-<style>
-body {
-  margin: 0;
-  font-family: Arial;
-  text-align: center;
-  background: #ffe6f0;
-}
-
-#menu {
-  padding: 50px;
-}
-
-button {
-  padding: 15px 30px;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-canvas {
-  background: #fff;
-  display: none;
-  margin: auto;
-  border: 3px solid #ff66a3;
-}
-
-#controls {
-  display: none;
-  margin-top: 10px;
-  font-size: 18px;
-}
-
-#finalMessage {
-  display: none;
-  font-size: 50px;
-  color: red;
-  margin-top: 100px;
-}
-</style>
+  <meta charset="UTF-8">
+  <title>Jogo do Ursinho</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #fce4ec;
+      text-align: center;
+    }
+    #menu {
+      padding: 50px;
+      margin-top: 150px;
+    }
+    button {
+      padding: 20px 40px;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    canvas {
+      background: #fff;
+      display: none;
+      margin: auto;
+      border: 3px solid #f48fb1;
+      touch-action: none; /* Evita scroll ao tocar */
+    }
+    #controls {
+      display: none;
+      margin-top: 20px;
+      font-size: 20px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #ffe0f0;
+      display: flex;
+      justify-content: space-around;
+      padding: 15px 0;
+    }
+    .control-button {
+      width: 60px;
+      height: 60px;
+      font-size: 24px;
+      background: #f48fb1;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    #finalMessage {
+      display: none;
+      font-size: 50px;
+      color: red;
+      margin-top: 100px;
+    }
+  </style>
 </head>
 <body>
 
-<div id="menu">
-  <h1>🐻 Jogo do Ursinho 💖</h1>
-  <button onclick="startGame()">Jogar</button>
-</div>
+  <div id="menu">
+    <h1>🐻 Jogo do Ursinho 💖</h1>
+    <button onclick="startGame()">Jogar</button>
+  </div>
 
-<canvas id="gameCanvas" width="600" height="400"></canvas>
+  <canvas id="gameCanvas" width="600" height="400"></canvas>
 
-<div id="controls">
-  ⬅️➡️ mover | ⬆️ pular | ⬇️ descer
-</div>
+  <div id="controls">
+    <button class="control-button" data-action="left">⬅️</button>
+    <button class="control-button" data-action="up">⬆️</button>
+    <button class="control-button" data-action="down">⬇️</button>
+    <button class="control-button" data-action="right">➡️</button>
+    <button class="control-button" data-action="jump">Pular</button>
+  </div>
 
-<div id="finalMessage">
-  Eu te amo Cintia ❤️
-</div>
+  <div id="finalMessage">
+    Eu te amo Cintia ❤️
+  </div>
 
-<script>
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
 
-let player = { x: 50, y: 300, w: 30, h: 30, dy: 0, jumping: false };
-let gravity = 0.6;
+    let player = { x: 50, y: 300, w: 30, h: 30, dy: 0, jumping: false };
+    let gravity = 0.6;
 
-let hearts = [];
-let obstacles = [];
-let score = 0;
+    let hearts = [];
+    let obstacles = [];
+    let score = 0;
 
-function startGame() {
-  document.getElementById("menu").style.display = "none";
-  canvas.style.display = "block";
-  document.getElementById("controls").style.display = "block";
-  
-  createHearts();
-  createObstacles();
-  gameLoop();
-}
-
-function createHearts() {
-  for (let i = 0; i < 5; i++) {
-    hearts.push({
-      x: 150 + i * 80,
-      y: 300,
-      collected: false
-    });
-  }
-}
-
-function createObstacles() {
-  obstacles.push({ x: 300, y: 320, w: 30, h: 30 });
-  obstacles.push({ x: 450, y: 320, w: 30, h: 30 });
-}
-
-document.addEventListener("keydown", (e) => {
-  if (e.key === "ArrowRight") player.x += 20;
-  if (e.key === "ArrowLeft") player.x -= 20;
-
-  if (e.key === "ArrowUp" && !player.jumping) {
-    player.dy = -10;
-    player.jumping = true;
-  }
-});
-
-function update() {
-  player.dy += gravity;
-  player.y += player.dy;
-
-  if (player.y > 300) {
-    player.y = 300;
-    player.jumping = false;
-  }
-
-  hearts.forEach(h => {
-    if (!h.collected &&
-        player.x < h.x + 20 &&
-        player.x + player.w > h.x &&
-        player.y < h.y + 20 &&
-        player.y + player.h > h.y) {
-      h.collected = true;
-      score++;
+    function startGame() {
+      document.getElementById("menu").style.display = "none";
+      canvas.style.display = "block";
+      document.getElementById("controls").style.display = "flex";
+      createHearts();
+      createObstacles();
+      gameLoop();
     }
-  });
 
-  obstacles.forEach(o => {
-    if (player.x < o.x + o.w &&
-        player.x + player.w > o.x &&
-        player.y < o.y + o.h &&
-        player.y + player.h > o.y) {
-      alert("Você bateu! 😢");
-      location.reload();
+    function createHearts() {
+      for (let i = 0; i < 5; i++) {
+        hearts.push({
+          x: 150 + i * 80,
+          y: 300,
+          collected: false
+        });
+      }
     }
-  });
 
-  if (score === hearts.length) {
-    canvas.style.display = "none";
-    document.getElementById("controls").style.display = "none";
-    document.getElementById("finalMessage").style.display = "block";
-  }
-}
-
-function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // chão
-  ctx.fillStyle = "#ccc";
-  ctx.fillRect(0, 330, 600, 70);
-
-  // ursinho
-  ctx.fillStyle = "#8B4513";
-  ctx.fillRect(player.x, player.y, player.w, player.h);
-
-  // corações
-  hearts.forEach(h => {
-    if (!h.collected) {
-      ctx.fillStyle = "red";
-      ctx.fillText("❤️", h.x, h.y + 20);
+    function createObstacles() {
+      obstacles.push({ x: 300, y: 320, w: 30, h: 30 }); // Obstáculo no meio
+      obstacles.push({ x: 450, y: 150, w: 30, h: 30 }); // Obstáculo superior
     }
-  });
 
-  // obstáculos
-  ctx.fillStyle = "black";
-  obstacles.forEach(o => {
-    ctx.fillRect(o.x, o.y, o.w, o.h);
-  });
-}
+    document.addEventListener("keydown", handleKey);
+    document.getElementById("controls").addEventListener("touchstart", handleTouch);
+    document.getElementById("controls").addEventListener("click", handleButtonClick);
 
-function gameLoop() {
-  update();
-  draw();
-  requestAnimationFrame(gameLoop);
-}
-</script>
+    function handleKey(e) {
+      if (e.key === "ArrowRight") player.x += 20;
+      if (e.key === "ArrowLeft") player.x -= 20;
+      if (e.key === "ArrowUp" && !player.jumping) {
+        player.dy = -10;
+        player.jumping = true;
+      }
+      if (e.key === "ArrowDown") player.y += 20;
+      if (e.key === "ArrowUp" && !player.jumping) {
+        player.dy = -10;
+        player.jumping = true;
+      }
+    }
 
-</body>
-</html>
+    function handleTouch(e) {
+      e.preventDefault();
+      let touch = e.targetTouches[0];
+      let x = touch.clientX;
+      let y = touch.clientY;
+
+      // Identificar onde tocou na área
+      let controls = document.getElementById("controls");
+      let buttons = controls.getElementsByClassName("control-button");
+
+      // Botões mapeados
+      for (let btn of buttons) {
+        let rect = btn.getBoundingClientRect();
+        if (
+          x >= rect.left && x <= rect.right &&
+          y >= rect.top && y <= rect.bottom
+        ) {
+          handleAction(btn.get
