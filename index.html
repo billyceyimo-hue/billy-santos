@@ -28,8 +28,6 @@
     }
     #controls {
       display: none;
-      margin-top: 20px;
-      font-size: 20px;
       position: fixed;
       bottom: 0;
       width: 100%;
@@ -37,6 +35,7 @@
       display: flex;
       justify-content: space-around;
       padding: 15px 0;
+      margin-bottom: 20px;
     }
     .control-button {
       width: 60px;
@@ -63,20 +62,4 @@
     <button onclick="startGame()">Jogar</button>
   </div>
 
-  <canvas id="gameCanvas" width="600" height="400"></canvas>
-
-  <div id="controls">
-    <button class="control-button" data-action="left">⬅️</button>
-    <button class="control-button" data-action="up">⬆️</button>
-    <button class="control-button" data-action="down">⬇️</button>
-    <button class="control-button" data-action="right">➡️</button>
-    <button class="control-button" data-action="jump">Pular</button>
-  </div>
-
-  <div id="finalMessage">
-    Eu te amo Cinthya ❤️
-  </div>
-
-  <script>
-    const canvas = document.getElementById("gameCanvas");
-    const ctx = canvas.
+  <canvas id="gameCanvas"
