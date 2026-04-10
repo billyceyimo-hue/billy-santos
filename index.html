@@ -1,65 +1,153 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <title>Jogo do Ursinho</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #fce4ec;
-      text-align: center;
-    }
-    #menu {
-      padding: 50px;
-      margin-top: 150px;
-    }
-    button {
-      padding: 20px 40px;
-      font-size: 24px;
-      cursor: pointer;
-    }
-    canvas {
-      background: #fff;
-      display: none;
-      margin: auto;
-      border: 3px solid #f48fb1;
-      touch-action: none; /* Evita scroll ao tocar */
-    }
-    #controls {
-      display: none;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background: #ffe0f0;
-      display: flex;
-      justify-content: space-around;
-      padding: 15px 0;
-      margin-bottom: 20px;
-    }
-    .control-button {
-      width: 60px;
-      height: 60px;
-      font-size: 24px;
-      background: #f48fb1;
-      color: white;
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-    }
-    #finalMessage {
-      display: none;
-      font-size: 50px;
-      color: red;
-      margin-top: 100px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joguinho do Ursinho</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #f0f8ff;
+            position: relative;
+        }
+        canvas {
+            display: block;
+            background-color: #87ceeb;
+            margin: 0 auto;
+        }
+        #score {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+        .button {
+            width: 60px;
+            height: 60px;
+            background-color: #ccc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
+    <div id="score">Corações: 0</div>
+    <canvas id="gameCanvas" width="800" height="400"></canvas>
 
-  <div id="menu">
-    <h1>🐻 Jogo do Ursinho 💖</h1>
-    <button onclick="startGame()">Jogar</button>
-  </div>
+    <div id="controls">
+        <div class="button" id="left">←</div>
+        <div class="button" id="right">→</div>
+        <div class="button" id="jump">↑</div>
+    </div>
 
-  <canvas id="gameCanvas"
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        let ursinho = { x: 50, y: 300, width: 40, height: 40, speed: 5, dy: 0 };
+        let coracoes = [];
+        let obstaculos = [];
+        let score = 0;
+        let gravity = 0.5;
+        let jumpPower = -10;
+        let frames = 0;
+
+        function criarCoracao() {
+            let coracao = { x: 800, y: Math.random() * (canvas.height - 30), width: 20, height: 20 };
+            coracoes.push(coracao);
+        }
+
+        function criarObstaculo() {
+            let obstaculo = { x: 800, y: 330, width: 30, height: 40 };
+            obstaculos.push(obstaculo);
+        }
+
+        function desenharUrsinho() {
+            ctx.fillStyle = 'brown';
+            ctx.fillRect(ursinho.x, ursinho.y, ursinho.width, ursinho.height);
+        }
+
+        function desenharCoracoes() {
+            ctx.fillStyle = 'red';
+            coracoes.forEach(coracao => {
+                ctx.beginPath();
+                ctx.arc(coracao.x + coracao.width / 2, coracao.y + coracao.height / 2, coracao.width / 2, 0, Math.PI * 2);
+                ctx.fill();
+            });
+        }
+
+        function desenharObstaculos() {
+            ctx.fillStyle = 'black';
+            obstaculos.forEach(obstaculo => {
+                ctx.fillRect(obstaculo.x, obstaculo.y, obstaculo.width, obstaculo.height);
+            });
+        }
+
+        function atualizar() {
+            frames++;
+            if (frames % 150 === 0) {
+                criarCoracao();
+            }
+            if (frames % 200 === 0) {
+                criarObstaculo();
+            }
+
+            ursinho.y += ursinho.dy;
+            if (ursinho.y + ursinho.height < canvas.height) {
+                ursinho.dy += gravity;
+            } else {
+                ursinho.y = canvas.height - ursinho.height;
+                ursinho.dy = 0;
+            }
+
+            coracoes.forEach(coracao => coracao.x -= 3);
+            obstaculos.forEach(obstaculo => obstaculo.x -= 5);
+
+            coracoes = coracoes.filter(coracao => {
+                if (collide(ursinho, coracao)) {
+                    score++;
+                    document.getElementById('score').innerText = `Corações: ${score}`;
+                    return false;
+                }
+                return coracao.x + coracao.width > 0;
+            });
+
+            let colidiu = obstaculos.some(obstaculo => collide(ursinho, obstaculo));
+            if (colidiu) {
+                alert('Você colidiu! Pontuação final: ' + score);
+                document.location.reload();
+            }
+
+            desenhar();
+        }
+
+        function desenhar() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            desenharUrsinho();
+            desenharCoracoes();
+            desenharObstaculos();
+        }
+
+        function collide(rect1, rect2) {
+            return (
+                rect1.x < rect2.x + rect2.width &&
+                rect1.x + rect1.width > rect2.x &&
+                rect1.y < rect2.y + rect2.height &&
+                rect1.y + rect1.height > rect2.y
+            );
+        }
+
+        function
