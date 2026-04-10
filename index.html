@@ -1,63 +1,231 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Site Simples</title>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-        }
-        h1 {
-            margin-bottom: 20px;
-        }
-        #message {
-            margin-top: 20px;
-            font-size: 20px;
-            color: #333;
-            height: 30px;
-        }
-        #hearts {
-            margin-top: 20px;
-            font-size: 30px;
-            color: red;
-            display: none;
-        }
-        #clickButton {
-            padding: 10px 20px;
-            font-size: 18px;
-            cursor: pointer;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jogo do Ursinho 💖</title>
+
+<style>
+body {
+  margin: 0;
+  overflow: hidden;
+  font-family: Arial;
+  background: #87CEEB;
+}
+
+#startScreen {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #000000cc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+#startBtn {
+  padding: 20px 40px;
+  font-size: 24px;
+  border: none;
+  border-radius: 10px;
+  background: pink;
+}
+
+#game {
+  position: relative;
+  width: 100vw;
+  height: 90vh;
+  background: #cce7ff;
+  display: none;
+}
+
+#bear {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  bottom: 10px;
+  left: 50px;
+  background: url('https://cdn-icons-png.flaticon.com/512/616/616408.png') no-repeat center;
+  background-size: cover;
+}
+
+.heart {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: url('https://cdn-icons-png.flaticon.com/512/833/833472.png') no-repeat center;
+  background-size: cover;
+}
+
+.obstacle {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: black;
+  bottom: 10px;
+}
+
+#controls {
+  height: 10vh;
+  background: #333;
+  display: none;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.btn {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 20px;
+}
+
+#message {
+  position: absolute;
+  top: 40%;
+  width: 100%;
+  text-align: center;
+  font-size: 28px;
+  color: red;
+  display: none;
+}
+</style>
 </head>
+
 <body>
 
-    <h1>Bem-vinda ao meu teste amor❤️</h1>
-    <button id="clickButton">Clique aqui</button>
-    <div id="message"></div>
-    <div id="hearts">❤️❤️❤️</div>
+<!-- TELA INICIAL -->
+<div id="startScreen">
+  <button id="startBtn" onclick="startGame()">Jogar 💖</button>
+</div>
 
-    <script>
-        const button = document.getElementById('clickButton');
-        const message = document.getElementById('message');
-        const hearts = document.getElementById('hearts');
+<div id="game">
+  <div id="bear"></div>
 
-        button.addEventListener('click', () => {
-            message.textContent = 'Está pronto para o que vai aparecer...';
-            hearts.style.display = 'none'; // Esconde os corações
-            setTimeout(() => {
-                message.textContent = 'Eu te amo muito minha vida!!❤️❤️';
-                hearts.style.display = 'block'; // Mostra os corações
-            }, 5000); // 5 segundos
-        });
-    </script>
+  <!-- Corações -->
+  <div class="heart" style="left:200px; bottom:50px;"></div>
+  <div class="heart" style="left:400px; bottom:50px;"></div>
+  <div class="heart" style="left:600px; bottom:50px;"></div>
+
+  <!-- Obstáculos -->
+  <div class="obstacle" style="left:300px;"></div>
+  <div class="obstacle" style="left:500px;"></div>
+
+  <div id="message">Parabéns Cinthya meu amor!! 💖</div>
+</div>
+
+<!-- CONTROLES -->
+<div id="controls">
+  <div class="btn" onclick="moveLeft()">⬅️</div>
+  <div class="btn" onclick="jump()">⬆️</div>
+  <div class="btn" onclick="moveRight()">➡️</div>
+</div>
+
+<!-- SONS -->
+<audio id="collectSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
+<audio id="winSound" src="https://www.soundjay.com/human/sounds/applause-8.mp3"></audio>
+
+<script>
+let bear = document.getElementById("bear");
+let hearts = document.querySelectorAll(".heart");
+let obstacles = document.querySelectorAll(".obstacle");
+let message = document.getElementById("message");
+
+let collectSound = document.getElementById("collectSound");
+let winSound = document.getElementById("winSound");
+
+let x = 50;
+let y = 10;
+let collected = 0;
+let jumping = false;
+
+// INICIAR JOGO
+function startGame() {
+  document.getElementById("startScreen").style.display = "none";
+  document.getElementById("game").style.display = "block";
+  document.getElementById("controls").style.display = "flex";
+}
+
+function updatePosition() {
+  bear.style.left = x + "px";
+  bear.style.bottom = y + "px";
+}
+
+function moveLeft() {
+  x -= 20;
+  checkCollision();
+  updatePosition();
+}
+
+function moveRight() {
+  x += 20;
+  checkCollision();
+  updatePosition();
+}
+
+function jump() {
+  if (jumping) return;
+  jumping = true;
+
+  let up = setInterval(() => {
+    y += 10;
+    if (y >= 100) {
+      clearInterval(up);
+      let down = setInterval(() => {
+        y -= 10;
+        if (y <= 10) {
+          y = 10;
+          clearInterval(down);
+          jumping = false;
+        }
+        updatePosition();
+      }, 20);
+    }
+    updatePosition();
+  }, 20);
+}
+
+function checkCollision() {
+  let bearRect = bear.getBoundingClientRect();
+
+  // Obstáculos
+  obstacles.forEach(obs => {
+    let rect = obs.getBoundingClientRect();
+    if (
+      bearRect.left < rect.right &&
+      bearRect.right > rect.left &&
+      bearRect.bottom > rect.top
+    ) {
+      x = 50;
+      y = 10;
+      updatePosition();
+    }
+  });
+
+  // Corações
+  hearts.forEach((heart, index) => {
+    if (!heart) return;
+
+    let rect = heart.getBoundingClientRect();
+    if (
+      bearRect.left < rect.right &&
+      bearRect.right > rect.left &&
+      bearRect.bottom > rect.top
+    ) {
+      heart.style.display = "none";
+      collectSound.play();
+      collected++;
+      hearts[index] = null;
+
+      if (collected === 3) {
+        message.style.display = "block";
+        winSound.play();
+      }
+    }
+  });
+}
+</script>
 
 </body>
 </html>
