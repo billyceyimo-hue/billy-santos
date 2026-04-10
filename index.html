@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jogo do Ursinho</title>
+    <title>Meu Site Simples</title>
     <style>
         body {
             display: flex;
@@ -12,36 +12,25 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            background-color: #f0f0f0;
             font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
         }
         h1 {
             margin-bottom: 20px;
         }
-        #gameCanvas {
-            background-color: white;
-            border: 2px solid #000;
+        #message {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #333;
+            height: 30px;
         }
-        .controls {
-            position: fixed;
-            bottom: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 30px;
+        #hearts {
+            margin-top: 20px;
+            font-size: 30px;
+            color: red;
+            display: none;
         }
-        .button {
-            width: 60px;
-            height: 60px;
-            background-color: #ddd;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-            font-size: 24px;
-            cursor: pointer;
-        }
-        #startButton {
-            margin: 20px;
+        #clickButton {
             padding: 10px 20px;
             font-size: 18px;
             cursor: pointer;
@@ -50,146 +39,25 @@
 </head>
 <body>
 
-    <h1>Jogo do Ursinho</h1>
-    <button id="startButton">Jogar</button>
-    <canvas id="gameCanvas" width="400" height="300"></canvas>
-
-    <div class="controls">
-        <div class="button" id="left">←</div>
-        <div class="button" id="jump">↑</div>
-        <div class="button" id="right">→</div>
-    </div>
+    <h1>Bem-vindo ao meu site</h1>
+    <button id="clickButton">Clique aqui</button>
+    <div id="message"></div>
+    <div id="hearts">❤️❤️❤️</div>
 
     <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
+        const button = document.getElementById('clickButton');
+        const message = document.getElementById('message');
+        const hearts = document.getElementById('hearts');
 
-        let gameStarted = false;
-        let bear = { x: 50, y: 250, width: 40, height: 40, speed: 5, jumping: false, jumpStrength: 12, yVelocity: 0 };
-        let obstacles = [
-            { x: 150, y: 270, width: 20, height: 30 },
-            { x: 300, y: 250, width: 20, height: 30 }
-        ];
-        let hearts = [
-            { x: 180, y: 230, width: 20, height: 20, collected: false },
-            { x: 330, y: 200, width: 20, height: 20, collected: false },
-            { x: 350, y: 240, width: 20, height: 20, collected: false }
-        ];
-        let score = 0;
-
-        function drawBear() {
-            ctx.fillStyle = 'blue';
-            ctx.fillRect(bear.x, bear.y, bear.width, bear.height);
-        }
-
-        function drawObstacles() {
-            ctx.fillStyle = 'red';
-            obstacles.forEach(obs => ctx.fillRect(obs.x, obs.y, obs.width, obs.height));
-        }
-
-        function drawHearts() {
-            ctx.fillStyle = 'pink';
-            hearts.forEach(heart => {
-                if (!heart.collected) {
-                    ctx.fillRect(heart.x, heart.y, heart.width, heart.height);
-                }
-            });
-        }
-
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawBear();
-            drawObstacles();
-            drawHearts();
-            requestAnimationFrame(draw);
-        }
-
-        function checkCollisions() {
-            // Verifica colisão com obstáculos
-            for (let obs of obstacles) {
-                if (bear.x < obs.x + obs.width &&
-                    bear.x + bear.width > obs.x &&
-                    bear.y < obs.y + obs.height &&
-                    bear.y + bear.height > obs.y) {
-                        bear.x = 50;
-                        bear.y = 250;
-                        bear.jumping = false;
-                        score = 0;
-                        break;
-                }
-            }
-
-            // Verifica colisão com corações
-            hearts.forEach(heart => {
-                if (!heart.collected &&
-                    bear.x < heart.x + heart.width &&
-                    bear.x + bear.width > heart.x &&
-                    bear.y < heart.y + heart.height &&
-                    bear.y + bear.height > heart.y) {
-                        heart.collected = true;
-                        score++;
-                }
-            });
-        }
-
-        function update() {
-            if (bear.jumping) {
-                bear.yVelocity
-        document.getElementById('startButton').addEventListener('click', () => {
-            gameStarted = true;
-            draw();
-        });
-
-        function update() {
-            if (!gameStarted) return;
-            if (bear.jumping) {
-                bear.yVelocity -= 1;
-                bear.y += bear.yVelocity;
-                if (bear.y > 250) {
-                    bear.y = 250;
-                    bear.jumping = false;
-                    bear.yVelocity = 0;
-                }
-            }
-            checkCollisions();
-        }
-
-        // Atualiza o jogo a cada frame
-        function gameLoop() {
-            update();
-            draw();
-            requestAnimationFrame(gameLoop);
-        }
-
-        // Inicia o loop apenas quando o jogo começar
-        function draw() {
-            if (!gameStarted) {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                return;
-            }
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawBear();
-            drawObstacles();
-            drawHearts();
-        }
-
-        // Começa o loop do jogo
-        gameLoop();
-
-        // Controle das setas
-        document.getElementById('left').addEventListener('touchstart', () => {
-            bear.x -= bear.speed;
-        });
-        document.getElementById('right').addEventListener('touchstart', () => {
-            bear.x += bear.speed;
-        });
-        document.getElementById('jump').addEventListener('touchstart', () => {
-            if (!bear.jumping) {
-                bear.jumping = true;
-                bear.yVelocity = bear.jumpStrength;
-            }
+        button.addEventListener('click', () => {
+            message.textContent = 'Está pronto para o que vai aparecer...';
+            hearts.style.display = 'none'; // Esconde os corações
+            setTimeout(() => {
+                message.textContent = 'Eu te amo!';
+                hearts.style.display = 'block'; // Mostra os corações
+            }, 5000); // 5 segundos
         });
     </script>
+
 </body>
 </html>
-            
