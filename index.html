@@ -174,8 +174,8 @@ function jump() {
       clearInterval(up);
       let down = setInterval(() => {
         y -= 5;
-        if (y <= 10) {
-          y = 10;
+        if (y <= 5) {
+          y = 5;
           clearInterval(down);
           jumping = false;
         }
