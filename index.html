@@ -1,171 +1,178 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Jogo do Ursinho</title>
+<title>Jogo do Ursinho 💖</title>
 <style>
-    body {
-        margin: 0;
-        font-family: Arial;
-        text-align: center;
-        background: #f0f8ff;
-    }
+body {
+  margin: 0;
+  font-family: Arial;
+  text-align: center;
+  background: #ffe6f0;
+}
 
-    #menu {
-        padding: 50px;
-    }
+#menu {
+  padding: 50px;
+}
 
-    #gameCanvas {
-        background: #87ceeb;
-        display: none;
-        margin: auto;
-        border: 3px solid #333;
-    }
+button {
+  padding: 15px 30px;
+  font-size: 20px;
+  cursor: pointer;
+}
 
-    button {
-        padding: 15px 30px;
-        font-size: 20px;
-        cursor: pointer;
-        border-radius: 10px;
-        border: none;
-        background: pink;
-    }
+canvas {
+  background: #fff;
+  display: none;
+  margin: auto;
+  border: 3px solid #ff66a3;
+}
 
-    #winMessage {
-        display: none;
-        font-size: 50px;
-        color: red;
-        margin-top: 20px;
-    }
+#controls {
+  display: none;
+  margin-top: 10px;
+  font-size: 18px;
+}
+
+#finalMessage {
+  display: none;
+  font-size: 50px;
+  color: red;
+  margin-top: 100px;
+}
 </style>
 </head>
 <body>
 
 <div id="menu">
-    <h1>🐻 Jogo do Ursinho</h1>
-    <button onclick="startGame()">Jogar</button>
+  <h1>🐻 Jogo do Ursinho 💖</h1>
+  <button onclick="startGame()">Jogar</button>
 </div>
 
 <canvas id="gameCanvas" width="600" height="400"></canvas>
 
-<div id="winMessage">EU TE AMO ❤️</div>
+<div id="controls">
+  ⬅️➡️ mover | ⬆️ pular | ⬇️ descer
+</div>
+
+<div id="finalMessage">
+  Eu te amo Cintia ❤️
+</div>
 
 <script>
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-let player = { x: 50, y: 300, size: 30, dy: 0, jumping: false };
-let gravity = 0.5;
+let player = { x: 50, y: 300, w: 30, h: 30, dy: 0, jumping: false };
+let gravity = 0.6;
 
 let hearts = [];
 let obstacles = [];
 let score = 0;
 
 function startGame() {
-    document.getElementById("menu").style.display = "none";
-    canvas.style.display = "block";
-
-    // Criar corações
-    for (let i = 0; i < 5; i++) {
-        hearts.push({
-            x: Math.random() * 550,
-            y: Math.random() * 300
-        });
-    }
-
-    // Criar obstáculos
-    for (let i = 0; i < 3; i++) {
-        obstacles.push({
-            x: 200 + i * 120,
-            y: 320,
-            width: 30,
-            height: 30
-        });
-    }
-
-    gameLoop();
+  document.getElementById("menu").style.display = "none";
+  canvas.style.display = "block";
+  document.getElementById("controls").style.display = "block";
+  
+  createHearts();
+  createObstacles();
+  gameLoop();
 }
 
-function drawPlayer() {
-    ctx.fillStyle = "brown";
-    ctx.fillRect(player.x, player.y, player.size, player.size);
-}
-
-function drawHearts() {
-    ctx.fillStyle = "red";
-    hearts.forEach((h, index) => {
-        ctx.beginPath();
-        ctx.arc(h.x, h.y, 10, 0, Math.PI * 2);
-        ctx.fill();
-
-        // colisão
-        if (
-            player.x < h.x + 10 &&
-            player.x + player.size > h.x &&
-            player.y < h.y + 10 &&
-            player.y + player.size > h.y
-        ) {
-            hearts.splice(index, 1);
-            score++;
-        }
+function createHearts() {
+  for (let i = 0; i < 5; i++) {
+    hearts.push({
+      x: 150 + i * 80,
+      y: 300,
+      collected: false
     });
+  }
 }
 
-function drawObstacles() {
-    ctx.fillStyle = "black";
-    obstacles.forEach(o => {
-        ctx.fillRect(o.x, o.y, o.width, o.height);
-
-        // colisão
-        if (
-            player.x < o.x + o.width &&
-            player.x + player.size > o.x &&
-            player.y < o.y + o.height &&
-            player.y + player.size > o.y
-        ) {
-            alert("Você bateu! 😢");
-            location.reload();
-        }
-    });
+function createObstacles() {
+  obstacles.push({ x: 300, y: 320, w: 30, h: 30 });
+  obstacles.push({ x: 450, y: 320, w: 30, h: 30 });
 }
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowRight") player.x += 20;
+  if (e.key === "ArrowLeft") player.x -= 20;
+
+  if (e.key === "ArrowUp" && !player.jumping) {
+    player.dy = -10;
+    player.jumping = true;
+  }
+});
 
 function update() {
-    player.dy += gravity;
-    player.y += player.dy;
+  player.dy += gravity;
+  player.y += player.dy;
 
-    if (player.y > 350) {
-        player.y = 350;
-        player.jumping = false;
-    }
+  if (player.y > 300) {
+    player.y = 300;
+    player.jumping = false;
+  }
 
-    if (score === 5) {
-        canvas.style.display = "none";
-        document.getElementById("winMessage").style.display = "block";
-        return;
+  hearts.forEach(h => {
+    if (!h.collected &&
+        player.x < h.x + 20 &&
+        player.x + player.w > h.x &&
+        player.y < h.y + 20 &&
+        player.y + player.h > h.y) {
+      h.collected = true;
+      score++;
     }
+  });
+
+  obstacles.forEach(o => {
+    if (player.x < o.x + o.w &&
+        player.x + player.w > o.x &&
+        player.y < o.y + o.h &&
+        player.y + player.h > o.y) {
+      alert("Você bateu! 😢");
+      location.reload();
+    }
+  });
+
+  if (score === hearts.length) {
+    canvas.style.display = "none";
+    document.getElementById("controls").style.display = "none";
+    document.getElementById("finalMessage").style.display = "block";
+  }
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // chão
+  ctx.fillStyle = "#ccc";
+  ctx.fillRect(0, 330, 600, 70);
+
+  // ursinho
+  ctx.fillStyle = "#8B4513";
+  ctx.fillRect(player.x, player.y, player.w, player.h);
+
+  // corações
+  hearts.forEach(h => {
+    if (!h.collected) {
+      ctx.fillStyle = "red";
+      ctx.fillText("❤️", h.x, h.y + 20);
+    }
+  });
+
+  // obstáculos
+  ctx.fillStyle = "black";
+  obstacles.forEach(o => {
+    ctx.fillRect(o.x, o.y, o.w, o.h);
+  });
 }
 
 function gameLoop() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    drawPlayer();
-    drawHearts();
-    drawObstacles();
-    update();
-
-    requestAnimationFrame(gameLoop);
+  update();
+  draw();
+  requestAnimationFrame(gameLoop);
 }
-
-// CONTROLES
-document.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowRight") player.x += 20;
-    if (e.key === "ArrowLeft") player.x -= 20;
-    if (e.key === "ArrowUp" && !player.jumping) {
-        player.dy = -10;
-        player.jumping = true;
-    }
-    if (e.key === "ArrowDown") player.y += 20;
-});
 </script>
 
 </body>
