@@ -173,7 +173,7 @@ function jump() {
     if (y >= 100) {
       clearInterval(up);
       let down = setInterval(() => {
-        y -= 10;
+        y -= 5;
         if (y <= 10) {
           y = 10;
           clearInterval(down);
