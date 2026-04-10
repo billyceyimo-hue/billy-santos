@@ -74,77 +74,9 @@
   </div>
 
   <div id="finalMessage">
-    Eu te amo Cintia ❤️
+    Eu te amo Cinthya ❤️
   </div>
 
   <script>
     const canvas = document.getElementById("gameCanvas");
-    const ctx = canvas.getContext("2d");
-
-    let player = { x: 50, y: 300, w: 30, h: 30, dy: 0, jumping: false };
-    let gravity = 0.6;
-
-    let hearts = [];
-    let obstacles = [];
-    let score = 0;
-
-    function startGame() {
-      document.getElementById("menu").style.display = "none";
-      canvas.style.display = "block";
-      document.getElementById("controls").style.display = "flex";
-      createHearts();
-      createObstacles();
-      gameLoop();
-    }
-
-    function createHearts() {
-      for (let i = 0; i < 5; i++) {
-        hearts.push({
-          x: 150 + i * 80,
-          y: 300,
-          collected: false
-        });
-      }
-    }
-
-    function createObstacles() {
-      obstacles.push({ x: 300, y: 320, w: 30, h: 30 }); // Obstáculo no meio
-      obstacles.push({ x: 450, y: 150, w: 30, h: 30 }); // Obstáculo superior
-    }
-
-    document.addEventListener("keydown", handleKey);
-    document.getElementById("controls").addEventListener("touchstart", handleTouch);
-    document.getElementById("controls").addEventListener("click", handleButtonClick);
-
-    function handleKey(e) {
-      if (e.key === "ArrowRight") player.x += 20;
-      if (e.key === "ArrowLeft") player.x -= 20;
-      if (e.key === "ArrowUp" && !player.jumping) {
-        player.dy = -10;
-        player.jumping = true;
-      }
-      if (e.key === "ArrowDown") player.y += 20;
-      if (e.key === "ArrowUp" && !player.jumping) {
-        player.dy = -10;
-        player.jumping = true;
-      }
-    }
-
-    function handleTouch(e) {
-      e.preventDefault();
-      let touch = e.targetTouches[0];
-      let x = touch.clientX;
-      let y = touch.clientY;
-
-      // Identificar onde tocou na área
-      let controls = document.getElementById("controls");
-      let buttons = controls.getElementsByClassName("control-button");
-
-      // Botões mapeados
-      for (let btn of buttons) {
-        let rect = btn.getBoundingClientRect();
-        if (
-          x >= rect.left && x <= rect.right &&
-          y >= rect.top && y <= rect.bottom
-        ) {
-          handleAction(btn.get
+    const ctx = canvas.
