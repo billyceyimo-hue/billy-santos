@@ -1,99 +1,172 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Site</title>
+<meta charset="UTF-8">
+<title>Jogo do Ursinho</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial;
+        text-align: center;
+        background: #f0f8ff;
+    }
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-        }
+    #menu {
+        padding: 50px;
+    }
 
-        header {
-            background-color: #333;
-            color: white;
-            padding: 15px;
-            text-align: center;
-        }
+    #gameCanvas {
+        background: #87ceeb;
+        display: none;
+        margin: auto;
+        border: 3px solid #333;
+    }
 
-        nav {
-            background-color: #555;
-            padding: 10px;
-            text-align: center;
-        }
+    button {
+        padding: 15px 30px;
+        font-size: 20px;
+        cursor: pointer;
+        border-radius: 10px;
+        border: none;
+        background: pink;
+    }
 
-        nav a {
-            color: white;
-            margin: 10px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        nav a:hover {
-            color: yellow;
-        }
-
-        main {
-            padding: 20px;
-        }
-
-        section {
-            background: white;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-        }
-
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px;
-        }
-    </style>
+    #winMessage {
+        display: none;
+        font-size: 50px;
+        color: red;
+        margin-top: 20px;
+    }
+</style>
 </head>
-
 <body>
 
-    <header>
-        <h1>O JOGO SEMPRE VIRA!</h1>
-        <p>ACESSO LIMITADO VOCÊ FOI ESCOLHIDO POR MIN</p>
-    </header>
+<div id="menu">
+    <h1>🐻 Jogo do Ursinho</h1>
+    <button onclick="startGame()">Jogar</button>
+</div>
 
-    <nav>
-        <a href="#">Início</a>
-        <a href="#">Sobre</a>
-        <a href="#">Contato</a>
-    </nav>
+<canvas id="gameCanvas" width="600" height="400"></canvas>
 
-    <main>
+<div id="winMessage">EU TE AMO ❤️</div>
 
-        <section>
-            <h2>Sobre</h2>
-            <p>Mostrarei a vocês oque me fez chegar ate aqui.</p>
-        </section>
+<script>
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
 
-        <section>
-            <h2>Conteúdo</h2>
-            <p>Vocês irão aprender tudo oque eu aprendi ao longo de toda minha carreira no digital e no mercado financeiro /     imobiliario e oque me fez ter uma vida financeira estavel, atraves de aulas que disponibilizarei para vocês.</p>
-        </section>
-        
-    </main> 
+let player = { x: 50, y: 300, size: 30, dy: 0, jumping: false };
+let gravity = 0.5;
 
-     <h1>O jogo sempre vira!!</h1>
+let hearts = [];
+let obstacles = [];
+let score = 0;
 
-<p>Viva isso!!</p>
+function startGame() {
+    document.getElementById("menu").style.display = "none";
+    canvas.style.display = "block";
 
-<img src="WhatsApp Image 2026-04-09 at 4.28.42 PM.jpeg" alt="Viva isso!!" width="1000"></P> 
+    // Criar corações
+    for (let i = 0; i < 5; i++) {
+        hearts.push({
+            x: Math.random() * 550,
+            y: Math.random() * 300
+        });
+    }
 
-    <img src="WhatsApp Image 2026-04-09 at 4.31.23 PM.jpeg" alt="Viva isso!!" width="1000"></P>
-    
-    <footer>
-        <p>&copy; 2026 BILLY SANTOS- Todos os direitos reservados</p>
-    </footer>
+    // Criar obstáculos
+    for (let i = 0; i < 3; i++) {
+        obstacles.push({
+            x: 200 + i * 120,
+            y: 320,
+            width: 30,
+            height: 30
+        });
+    }
+
+    gameLoop();
+}
+
+function drawPlayer() {
+    ctx.fillStyle = "brown";
+    ctx.fillRect(player.x, player.y, player.size, player.size);
+}
+
+function drawHearts() {
+    ctx.fillStyle = "red";
+    hearts.forEach((h, index) => {
+        ctx.beginPath();
+        ctx.arc(h.x, h.y, 10, 0, Math.PI * 2);
+        ctx.fill();
+
+        // colisão
+        if (
+            player.x < h.x + 10 &&
+            player.x + player.size > h.x &&
+            player.y < h.y + 10 &&
+            player.y + player.size > h.y
+        ) {
+            hearts.splice(index, 1);
+            score++;
+        }
+    });
+}
+
+function drawObstacles() {
+    ctx.fillStyle = "black";
+    obstacles.forEach(o => {
+        ctx.fillRect(o.x, o.y, o.width, o.height);
+
+        // colisão
+        if (
+            player.x < o.x + o.width &&
+            player.x + player.size > o.x &&
+            player.y < o.y + o.height &&
+            player.y + player.size > o.y
+        ) {
+            alert("Você bateu! 😢");
+            location.reload();
+        }
+    });
+}
+
+function update() {
+    player.dy += gravity;
+    player.y += player.dy;
+
+    if (player.y > 350) {
+        player.y = 350;
+        player.jumping = false;
+    }
+
+    if (score === 5) {
+        canvas.style.display = "none";
+        document.getElementById("winMessage").style.display = "block";
+        return;
+    }
+}
+
+function gameLoop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    drawPlayer();
+    drawHearts();
+    drawObstacles();
+    update();
+
+    requestAnimationFrame(gameLoop);
+}
+
+// CONTROLES
+document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight") player.x += 20;
+    if (e.key === "ArrowLeft") player.x -= 20;
+    if (e.key === "ArrowUp" && !player.jumping) {
+        player.dy = -10;
+        player.jumping = true;
+    }
+    if (e.key === "ArrowDown") player.y += 20;
+});
+</script>
 
 </body>
 </html>
