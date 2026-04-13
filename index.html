@@ -3,44 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Site Premium</title>
+<title>Milhão Gold</title>
 
 <style>
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #000;
-  color: #fff;
+  font-family: Arial;
+  background: black;
+  color: white;
 }
 
-/* MENU */
+/* HEADER */
 header {
-  background: #111;
-  padding: 15px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  padding: 15px;
   border-bottom: 2px solid gold;
 }
 
-header h1 {
-  color: gold;
+/* DASHBOARD */
+.dashboard {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 20px;
 }
 
-nav a {
-  color: white;
-  margin: 0 15px;
-  text-decoration: none;
-  transition: 0.3s;
-}
-
-nav a:hover {
-  color: gold;
-}
-
-/* SEÇÕES */
-section {
-  padding: 60px 20px;
+.card {
+  background: #111;
+  border: 1px solid gold;
+  border-radius: 10px;
+  margin: 10px;
+  padding: 20px;
+  width: 200px;
   text-align: center;
 }
 
@@ -48,51 +43,33 @@ h2 {
   color: gold;
 }
 
-/* BOTÕES */
+/* PROGRESSO */
+.barra {
+  width: 80%;
+  height: 20px;
+  background: #333;
+  margin: 20px auto;
+  border-radius: 10px;
+}
+
+.progresso {
+  height: 100%;
+  width: 0%;
+  background: gold;
+  border-radius: 10px;
+}
+
+/* BOTÃO */
 button {
   background: gold;
-  color: black;
   border: none;
-  padding: 12px 25px;
-  margin-top: 15px;
+  padding: 10px;
   cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s;
 }
 
-button:hover {
-  background: #ffd700;
-  transform: scale(1.1);
-}
-
-/* CARDS */
-.cards {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.card {
-  background: #111;
-  border: 1px solid gold;
-  margin: 15px;
-  padding: 20px;
-  width: 250px;
-  border-radius: 10px;
-  transition: 0.3s;
-}
-
-.card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 0 20px gold;
-}
-
-/* FOOTER */
-footer {
-  background: #111;
-  padding: 20px;
-  border-top: 2px solid gold;
-  text-align: center;
+/* ESCONDER */
+.hidden {
+  display: none;
 }
 </style>
 </head>
@@ -100,61 +77,80 @@ footer {
 <body>
 
 <header>
-  <h1>🔥 Premium Gold</h1>
-  <nav>
-    <a href="#inicio">Início</a>
-    <a href="#videos">Videoaulas</a>
-    <a href="#aoVivo">Ao Vivo</a>
-    <a href="#duvidas">Dúvidas</a>
-    <a href="#contato">Contato</a>
-  </nav>
+  <h1>💰 Dashboard Premium</h1>
 </header>
 
-<section id="inicio">
-  <h2>Bem-vindo ao Melhor Site 🔥</h2>
-  <p>Conteúdo exclusivo e de alto nível para você evoluir!</p>
-  <button>Começar Agora</button>
-</section>
+<section>
 
-<section id="videos">
-  <h2>📚 Videoaulas</h2>
-  <div class="cards">
-    <div class="card">
-      <h3>Aula 1</h3>
-      <p>Introdução completa</p>
-    </div>
-    <div class="card">
-      <h3>Aula 2</h3>
-      <p>Conteúdo avançado</p>
-    </div>
-    <div class="card">
-      <h3>Aula 3</h3>
-      <p>Dominando tudo</p>
-    </div>
+<h2>📊 Seu Painel</h2>
+
+<div class="dashboard">
+  <div class="card">
+    <h3>XP</h3>
+    <p id="xp">0</p>
   </div>
+
+  <div class="card">
+    <h3>Nível</h3>
+    <p id="nivel">1</p>
+  </div>
+
+  <div class="card">
+    <h3>Aulas feitas</h3>
+    <p id="aulas">0</p>
+  </div>
+</div>
+
+<div class="barra">
+  <div class="progresso" id="barraXP"></div>
+</div>
+
 </section>
 
-<section id="aoVivo">
-  <h2>🔴 Ao Vivo</h2>
-  <p>Participe das nossas aulas ao vivo!</p>
-  <button>Entrar na Live</button>
+<section id="pratica">
+  <h2>🎯 Prática</h2>
+
+  <p>10 + 5 = ?</p>
+  <input id="resposta">
+  <button onclick="responder()">Responder</button>
+  <p id="msg"></p>
 </section>
 
-<section id="duvidas">
-  <h2>❓ Dúvidas</h2>
-  <p>Tem alguma dúvida? A gente te ajuda!</p>
-  <button>Ver Perguntas</button>
-</section>
+<script>
+let xp = localStorage.getItem("xp") || 0;
+let aulas = localStorage.getItem("aulas") || 0;
 
-<section id="contato">
-  <h2>📞 Contato</h2>
-  <p>Email: contato@site.com</p>
-  <p>WhatsApp: (00) 00000-0000</p>
-</section>
+function atualizar() {
+  document.getElementById("xp").innerText = xp;
+  document.getElementById("aulas").innerText = aulas;
 
-<footer>
-  <p>© 2026 - Todos os direitos reservados</p>
-</footer>
+  let nivel = Math.floor(xp / 50) + 1;
+  document.getElementById("nivel").innerText = nivel;
+
+  let progresso = (xp % 50) * 2;
+  document.getElementById("barraXP").style.width = progresso + "%";
+}
+
+function responder() {
+  let r = document.getElementById("resposta").value;
+  let msg = document.getElementById("msg");
+
+  if (r == 15) {
+    msg.innerText = "🔥 Acertou! +10 XP";
+    xp = parseInt(xp) + 10;
+    aulas++;
+  } else {
+    msg.innerText = "❌ Errou!";
+  }
+
+  localStorage.setItem("xp", xp);
+  localStorage.setItem("aulas", aulas);
+
+  atualizar();
+}
+
+atualizar();
+</script>
 
 </body>
 </html>
