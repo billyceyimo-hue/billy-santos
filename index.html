@@ -3,21 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Isnayle Multimarcas</title>
+<title>ISNAYLE MULTIMARCAS</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-
-:root{
-    --primary:#111827;
-    --secondary:#2563eb;
-    --light:#ffffff;
-    --background:#f8fafc;
-    --gray:#64748b;
-    --shadow:0 10px 25px rgba(0,0,0,.08);
-}
-
 *{
     margin:0;
     padding:0;
@@ -26,297 +16,445 @@
 }
 
 body{
-    background:var(--background);
+    background:#fff;
     color:#111;
 }
 
 header{
-    position:sticky;
-    top:0;
-    z-index:1000;
-    background:white;
-    box-shadow:var(--shadow);
-}
-
-.topbar{
+    background:#000;
+    color:#fff;
+    padding:20px 8%;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:18px 8%;
+    position:sticky;
+    top:0;
+    z-index:1000;
 }
 
 .logo{
-    font-size:30px;
+    font-size:32px;
     font-weight:700;
-    color:var(--secondary);
-}
-
-.search{
-    width:40%;
-    padding:12px 20px;
-    border:1px solid #ddd;
-    border-radius:40px;
-    outline:none;
-}
-
-.icons{
-    display:flex;
-    gap:20px;
-    font-size:20px;
-}
-
-nav{
-    display:flex;
-    justify-content:center;
-    gap:35px;
-    padding:15px;
-    background:#fff;
 }
 
 nav a{
+    color:#fff;
     text-decoration:none;
-    color:#333;
-    font-weight:500;
+    margin:0 15px;
+    transition:0.3s;
+}
+
+nav a:hover{
+    color:#ccc;
+}
+
+.cart-btn{
+    background:#fff;
+    color:#000;
+    border:none;
+    padding:10px 20px;
+    border-radius:30px;
+    cursor:pointer;
+    font-weight:600;
 }
 
 .hero{
-    height:600px;
-    background:linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.4)),
-    url('https://chatgpt.com/backend-api/estuary/content?id=file_000000004bd0720e8d802887bb3f3a11&ts=495170&p=fs&cid=1&sig=1d471dedda6eff1d330f3c86caa87c5d3c27677152fb472871219cd3b8b146d0&v=0');
+    height:80vh;
+    background:linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5)),
+    url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1600&q=80');
     background-size:cover;
     background-position:center;
     display:flex;
-    align-items:center;
     justify-content:center;
+    align-items:center;
     text-align:center;
-    color:white;
+    color:#fff;
 }
 
-.hero-content h1{
-    font-size:64px;
+.hero h1{
+    font-size:60px;
 }
 
-.hero-content p{
-    margin-top:15px;
+.hero p{
+    margin:20px 0;
     font-size:20px;
 }
 
-.btn{
-    margin-top:25px;
-    display:inline-block;
-    background:var(--secondary);
-    color:white;
-    text-decoration:none;
-    padding:14px 30px;
+.hero button{
+    padding:15px 40px;
+    border:none;
+    background:#fff;
+    color:#000;
     border-radius:30px;
+    cursor:pointer;
+    font-size:18px;
+    font-weight:bold;
 }
 
-.section-title{
+section{
+    padding:60px 8%;
+}
+
+.titulo{
     text-align:center;
-    margin:60px 0 30px;
-    font-size:36px;
+    margin-bottom:40px;
+    font-size:40px;
 }
 
-.products{
+.produtos{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:25px;
-    padding:0 8% 80px;
+    gap:30px;
 }
 
 .card{
-    background:white;
-    border-radius:18px;
+    background:#fff;
+    border:1px solid #ddd;
+    border-radius:15px;
     overflow:hidden;
-    box-shadow:var(--shadow);
-    transition:.3s;
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+    transition:0.3s;
 }
 
 .card:hover{
-    transform:translateY(-8px);
+    transform:translateY(-10px);
 }
 
 .card img{
     width:100%;
-    height:250px;
+    height:300px;
     object-fit:cover;
 }
 
-.card-body{
+.card-info{
     padding:20px;
 }
 
-.card h3{
+.card-info h3{
     margin-bottom:10px;
 }
 
-.price{
-    color:var(--secondary);
-    font-size:26px;
+.preco{
+    font-size:22px;
     font-weight:700;
+    margin:15px 0;
 }
 
-.buy{
-    width:100%;
-    margin-top:15px;
-    border:none;
+.btns{
+    display:flex;
+    gap:10px;
+}
+
+.btn{
+    flex:1;
     padding:12px;
-    background:var(--primary);
-    color:white;
-    border-radius:10px;
+    border:none;
     cursor:pointer;
+    border-radius:8px;
+    font-weight:600;
+}
+
+.comprar{
+    background:#000;
+    color:#fff;
+}
+
+.carrinho{
+    background:#eee;
+}
+
+.modal{
+    position:fixed;
+    top:0;
+    right:-400px;
+    width:350px;
+    height:100%;
+    background:#fff;
+    box-shadow:-5px 0 20px rgba(0,0,0,.2);
+    transition:.4s;
+    padding:20px;
+    overflow-y:auto;
+    z-index:9999;
+}
+
+.modal.ativo{
+    right:0;
+}
+
+.item-carrinho{
+    border-bottom:1px solid #ddd;
+    padding:15px 0;
+}
+
+.fechar{
+    background:red;
+    color:#fff;
+    border:none;
+    padding:10px;
+    border-radius:8px;
+    cursor:pointer;
+    margin-top:20px;
+    width:100%;
 }
 
 footer{
-    background:#111827;
-    color:white;
-    padding:50px 8%;
+    background:#000;
+    color:#fff;
     text-align:center;
+    padding:30px;
+    margin-top:50px;
 }
-
 </style>
 </head>
 
 <body>
 
 <header>
+    <div class="logo">ISNAYLE MULTIMARCAS</div>
 
-<div class="topbar">
+    <nav>
+        <a href="#camisas">Camisas</a>
+        <a href="#casacos">Casacos</a>
+        <a href="#calcas">Calças</a>
+        <a href="#sandalias">Sandálias</a>
+        <a href="#tenis">Tênis</a>
+        <a href="#bones">Bonés</a>
+    </nav>
 
-<div class="logo">Isnayle Multimarcas</div>
-
-<input type="text" class="search" placeholder="Pesquisar produtos...">
-
-<div class="icons">
-<div>🛒 <span id="cartCount">0</span></div>
-<div>👤</div>
-<div>❤</div>
-</div>
-
-</div>
-
-<nav>
-<a href="#home">Home</a>
-<a href="#categorias">Categorias</a>
-<a href="#" onclick="mostrarOfertas()">Ofertas</a>
-<a href="#" onclick="filtrarTecnologia()">Tecnologia</a>
-<a href="#contato">Contato</a>
-</nav>
-
+    <button class="cart-btn" onclick="abrirCarrinho()">
+        🛒 Carrinho (<span id="contador">0</span>)
+    </button>
 </header>
 
-<section class="hero" id="home">
-<div class="hero-content">
-<h1>Compre com Segurança</h1>
-<p>Isnayle Multimarcas 01.</p>
-<a href="#categorias" class="btn">Comprar Agora</a>
+<section class="hero">
+    <div>
+        <h1>ISNAYLE MULTIMARCAS</h1>
+        <p>As melhores marcas masculinas em um só lugar.</p>
+        <button>Comprar Agora</button>
+    </div>
+</section>
+
+<!-- CAMISAS -->
+<section id="camisas">
+<h2 class="titulo">Camisas Polo</h2>
+
+<div class="produtos">
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1603252109303-2751441dd157?auto=format&fit=crop&w=800&q=80">
+<div class="card-info">
+<h3>Polo Masculina Premium</h3>
+<p class="preco">R$ 129,90</p>
+
+<div class="btns">
+<button class="btn comprar">Comprar</button>
+<button class="btn carrinho" onclick="adicionarCarrinho('Polo Masculina Premium - R$129,90')">Carrinho</button>
+</div>
+</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1589310243389-96a5483213a8?auto=format&fit=crop&w=800&q=80">
+<div class="card-info">
+<h3>Polo Lacoste</h3>
+<p class="preco">R$ 299,90</p>
+
+<div class="btns">
+<button class="btn comprar">Comprar</button>
+<button class="btn carrinho" onclick="adicionarCarrinho('Polo Lacoste - R$299,90')">Carrinho</button>
+</div>
+</div>
+</div>
+
 </div>
 </section>
 
-<h2 class="section-title">Produtos em Destaque</h2>
+<!-- CALÇAS -->
+<section id="calcas">
+<h2 class="titulo">Calças</h2>
 
-<section class="products" id="categorias">
+<div class="produtos">
 
-<div class="card produto" data-nome="tenis premium calcado">
-<img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff">
-<div class="card-body">
-<h3>Tênis Premium</h3>
-<div class="price">R$ 399,90</div>
-<button class="buy">Adicionar ao Carrinho</button>
+<div class="card">
+<img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=800&q=80">
+<div class="card-info">
+<h3>Calça Jeans Masculina</h3>
+<p class="preco">R$ 189,90</p>
+
+<div class="btns">
+<button class="btn comprar">Comprar</button>
+<button class="btn carrinho" onclick="adicionarCarrinho('Calça Jeans - R$189,90')">Carrinho</button>
 </div>
-</div>
-
-<div class="card produto" data-nome="smartphone pro celular tecnologia">
-<img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9">
-<div class="card-body">
-<h3>Smartphone Pro</h3>
-<div class="price">R$ 2.999,90</div>
-<button class="buy">Adicionar ao Carrinho</button>
 </div>
 </div>
 
-<div class="card produto" data-nome="headphone bluetooth tecnologia">
-<img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e">
-<div class="card-body">
-<h3>Headphone Bluetooth</h3>
-<div class="price">R$ 499,90</div>
-<button class="buy">Adicionar ao Carrinho</button>
+<div class="card">
+<img src="https://images.unsplash.com/photo-1506629905607-28b73f17f5c7?auto=format&fit=crop&w=800&q=80">
+<div class="card-info">
+<h3>Calça Cargo com Elástico</h3>
+<p class="preco">R$ 199,90</p>
+
+<div class="btns">
+<button class="btn comprar">Comprar</button>
+<button class="btn carrinho" onclick="adicionarCarrinho('Calça Cargo - R$199,90')">Carrinho</button>
+</div>
 </div>
 </div>
 
+</div>
 </section>
 
-<footer id="contato">
-<h3>Isnayle Multimarcas</h3>
-<p>Pagamentos por PIX, Cartão e Boleto</p>
-<p>© 2026 Todos os direitos reservados</p>
+<!-- CASACOS -->
+<section id="casacos">
+<h2 class="titulo">Casacos</h2>
+
+<div class="produtos">
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=800&q=80">
+<div class="card-info">
+<h3>Bobojaco com Capuz Removível</h3>
+<p class="preco">R$ 349,90</p>
+
+<div class="btns">
+<button class="btn comprar">Comprar</button>
+<button class="btn carrinho" onclick="adicionarCarrinho('Bobojaco Masculino - R$349,90')">Carrinho</button>
+</div>
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- SANDÁLIAS -->
+<section id="sandalias">
+<h2 class="titulo">Sandálias</h2>
+
+<div class="produtos">
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80">
+<div class="card-info">
+<h3>Sandália Kenner</h3>
+<p class="preco">R$ 149,90</p>
+
+<div class="btns">
+<button class="btn comprar">Comprar</button>
+<button class="btn carrinho" onclick="adicionarCarrinho('Sandália Kenner - R$149,90')">Carrinho</button>
+</div>
+</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=800&q=80">
+<div class="card-info">
+<h3>Sandália Crocs</h3>
+<p class="preco">R$ 199,90</p>
+
+<div class="btns">
+<button class="btn comprar">Comprar</button>
+<button class="btn carrinho" onclick="adicionarCarrinho('Sandália Crocs - R$199,90')">Carrinho</button>
+</div>
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- TÊNIS -->
+<section id="tenis">
+<h2 class="titulo">Tênis Masculinos</h2>
+
+<div class="produtos">
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80">
+<div class="card-info">
+<h3>Tênis Masculino Casual</h3>
+<p class="preco">R$ 259,90</p>
+
+<div class="btns">
+<button class="btn comprar">Comprar</button>
+<button class="btn carrinho" onclick="adicionarCarrinho('Tênis Masculino - R$259,90')">Carrinho</button>
+</div>
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- BONÉS -->
+<section id="bones">
+<h2 class="titulo">Bonés</h2>
+
+<div class="produtos">
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1521369909029-2afed882baee?auto=format&fit=crop&w=800&q=80">
+<div class="card-info">
+<h3>Boné Lacoste</h3>
+<p class="preco">R$ 129,90</p>
+
+<div class="btns">
+<button class="btn comprar">Comprar</button>
+<button class="btn carrinho" onclick="adicionarCarrinho('Boné Lacoste - R$129,90')">Carrinho</button>
+</div>
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- CARRINHO -->
+<div class="modal" id="modalCarrinho">
+    <h2>Seu Carrinho</h2>
+    <div id="listaCarrinho"></div>
+    <button class="fechar" onclick="fecharCarrinho()">Fechar</button>
+</div>
+
+<footer>
+    © 2026 ISNAYLE MULTIMARCAS - Todos os direitos reservados.
 </footer>
 
 <script>
 
-// Carrinho
+let carrinho=[];
 
-let totalItens = 0;
+function adicionarCarrinho(produto){
+    carrinho.push(produto);
 
-document.querySelectorAll(".buy").forEach(botao => {
-    botao.addEventListener("click", () => {
-        totalItens++;
-        document.getElementById("cartCount").innerText = totalItens;
-        alert("Produto adicionado ao carrinho!");
-    });
-});
+    document.getElementById('contador').innerText = carrinho.length;
 
-// Pesquisa
+    atualizarCarrinho();
 
-const pesquisa = document.querySelector(".search");
-
-pesquisa.addEventListener("keyup", () => {
-
-    let texto = pesquisa.value.toLowerCase();
-
-    document.querySelectorAll(".produto").forEach(produto => {
-
-        let nome = produto.dataset.nome.toLowerCase();
-
-        if(nome.includes(texto)){
-            produto.style.display = "block";
-        }else{
-            produto.style.display = "none";
-        }
-
-    });
-
-});
-
-// Ofertas
-
-function mostrarOfertas(){
-    alert("🔥 Promoções especiais disponíveis!");
+    alert(produto + " adicionado ao carrinho!");
 }
 
-// Tecnologia
+function atualizarCarrinho(){
 
-function filtrarTecnologia(){
+    let lista = document.getElementById('listaCarrinho');
 
-    document.querySelectorAll(".produto").forEach(produto => {
+    lista.innerHTML="";
 
-        let nome = produto.dataset.nome.toLowerCase();
-
-        if(
-            nome.includes("tecnologia") ||
-            nome.includes("celular") ||
-            nome.includes("smartphone") ||
-            nome.includes("headphone")
-        ){
-            produto.style.display = "block";
-        }else{
-            produto.style.display = "none";
-        }
-
+    carrinho.forEach(item=>{
+        lista.innerHTML += `
+            <div class="item-carrinho">
+                ${item}
+            </div>
+        `;
     });
 
+}
+
+function abrirCarrinho(){
+    document.getElementById('modalCarrinho').classList.add('ativo');
+}
+
+function fecharCarrinho(){
+    document.getElementById('modalCarrinho').classList.remove('ativo');
 }
 
 </script>
 
 </body>
+</html>
